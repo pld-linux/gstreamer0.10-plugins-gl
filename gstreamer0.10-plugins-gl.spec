@@ -10,14 +10,15 @@
 %include	/usr/lib/rpm/macros.gstreamer
 Summary:	GStreamer Streaming-media framework plug-in for OpenGL
 Summary(pl.UTF-8):	Wtyczka OpenGL do środowiska strumieni multimedialnych GStreamer
-Name:		gstreamer-plugins-gl
+Name:		gstreamer0.10-plugins-gl
 Version:	0.10.3
 Release:	7
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-gl/%{gstname}-%{version}.tar.bz2
+Source0:	https://gstreamer.freedesktop.org/src/gst-plugins-gl/%{gstname}-%{version}.tar.bz2
 # Source0-md5:	ac70ede13f79978d56eaed8abaa3c938
-URL:		http://gstreamer.net/
+Patch0:		gstreamer-common-gtkdoc.patch
+URL:		https://gstreamer.freedesktop.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.10
@@ -25,8 +26,8 @@ BuildRequires:	automake >= 1:1.10
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glew-devel >= 1.4.0
 BuildRequires:	glib2-devel >= 1:2.6
-BuildRequires:	gstreamer-devel >= %{gst_req_ver}
-BuildRequires:	gstreamer-plugins-base-devel >= %{gstpb_req_ver}
+BuildRequires:	gstreamer0.10-devel >= %{gst_req_ver}
+BuildRequires:	gstreamer0.10-plugins-base-devel >= %{gstpb_req_ver}
 %{?with_apidocs:BuildRequires:	gtk-doc >= 1.6}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel >= 1.0
@@ -36,11 +37,12 @@ BuildRequires:	libvisual-devel >= 0.4.0
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.470
-Requires:	gstreamer >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base >= %{gstpb_req_ver}
+Requires:	gstreamer0.10 >= %{gst_req_ver}
+Requires:	gstreamer0.10-plugins-base >= %{gstpb_req_ver}
 Requires:	libprojectM >= 2.0.1
 Requires:	libvisual >= 0.4.0
-Obsoletes:	gstreamer-imagesink-gl
+Obsoletes:	gstreamer-imagesink-gl < 1
+Obsoletes:	gstreamer-plugins-gl < 1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -58,8 +60,9 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	OpenGL-GLU-devel
 Requires:	glew-devel >= 1.4.0
-Requires:	gstreamer-devel >= %{gst_req_ver}
-Requires:	gstreamer-plugins-base-devel >= %{gstpb_req_ver}
+Requires:	gstreamer0.10-devel >= %{gst_req_ver}
+Requires:	gstreamer0.10-plugins-base-devel >= %{gstpb_req_ver}
+Obsoletes:	gstreamer-plugins-gl-devel < 1
 
 %description devel
 Include files for GStreamer streaming-media framework OpenGL API.
@@ -73,6 +76,7 @@ Summary:	GStreamer streaming-media framework OpenGL API documentation
 Summary(pl.UTF-8):	Dokumentacja API OpenGL dla środowiska strumieni multimedialnych GStreamer
 Group:		Documentation
 Requires:	gtk-doc-common
+Obsoletes:	gstreamer-plugins-gl-apidocs < 1
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
 %endif
@@ -86,9 +90,10 @@ GStreamer.
 
 %prep
 %setup -q -n %{gstname}-%{version}
+cd common
+%patch0 -p1
 
 %build
-%{__gettextize}
 %{__libtoolize}
 %{__aclocal} -I m4 -I common/m4
 %{__autoconf}
@@ -98,7 +103,7 @@ GStreamer.
 	--disable-examples \
 	--disable-silent-rules \
 	--disable-static \
-	--%{?with_apidocs:en}%{!?with_apidocs:dis}able-gtk-doc \
+	--enable-gtk-doc%{!?with_apidocs:=no} \
 	--with-html-dir=%{_gtkdocdir}
 %{__make}
 
