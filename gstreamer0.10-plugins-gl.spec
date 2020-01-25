@@ -7,7 +7,6 @@
 %define		gst_req_ver	0.10.35
 %define		gstpb_req_ver	0.10.35
 
-%include	/usr/lib/rpm/macros.gstreamer
 Summary:	GStreamer Streaming-media framework plug-in for OpenGL
 Summary(pl.UTF-8):	Wtyczka OpenGL do środowiska strumieni multimedialnych GStreamer
 Name:		gstreamer0.10-plugins-gl
