@@ -76,9 +76,7 @@ Summary(pl.UTF-8):	Dokumentacja API OpenGL dla środowiska strumieni multimedial
 Group:		Documentation
 Requires:	gtk-doc-common
 Obsoletes:	gstreamer-plugins-gl-apidocs < 1
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 GStreamer streaming-media framework OpenGL API documentation.
