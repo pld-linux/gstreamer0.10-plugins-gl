@@ -35,7 +35,8 @@ BuildRequires:	libtool >= 2:1.5
 BuildRequires:	libvisual-devel >= 0.4.0
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.470
+BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.745
 Requires:	gstreamer0.10 >= %{gst_req_ver}
 Requires:	gstreamer0.10-plugins-base >= %{gstpb_req_ver}
 Requires:	libprojectM >= 2.0.1
@@ -106,6 +107,7 @@ cd common
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
